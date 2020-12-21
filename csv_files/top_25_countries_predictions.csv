@@ -1,4 +1,4 @@
-Entity,Year,Total_population,Total_Consumption,Total_water_use,Total_land_use,Total_CO2_emission
+Entity,Year,Total_population,Total_Meat_Consumption,Total_water_use,Total_land_use,Total_CO2_emission
 Argentina,1961,20817000,2123958510,1408098.94,15045.6880709507,51126710.217322834
 Argentina,1962,21153000,2179605120,1437861.8800000001,15375.845497565719,53640125.069606304
 Argentina,1963,21489000,2209498980,1438320.81,15315.25269247134,50032660.01259843

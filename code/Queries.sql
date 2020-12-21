@@ -219,7 +219,7 @@ and a.Entity = d.Entity;
 
 CREATE TABLE top_25_countries_predictions
 as
-SELECT a.Entity,a.Year,a.Total_population,a.Total_Consumption,
+SELECT a.Entity,a.Year,a.Total_population,a.Total_Consumption Total_Meat_Consumption,
 Total_water_use,Total_land_use,Total_CO2_emission
 FROM EGS.top_countries_CO2_vs_meat a
 INNER JOIN EGS.top_25_countries_land_use c
