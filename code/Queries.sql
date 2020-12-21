@@ -215,3 +215,24 @@ and a.Entity = d.Entity;
 
 
 ----------------------------------------------------------------------------
+
+
+CREATE TABLE top_25_countries_predictions
+as
+SELECT a.Entity,a.Year,a.Total_population,a.Total_Consumption,
+Total_water_use,Total_land_use,Total_CO2_emission
+FROM EGS.top_countries_CO2_vs_meat a
+INNER JOIN EGS.top_25_countries_land_use c
+ON A.YEAR = c.Year
+and a.Entity = c.Entity
+INNER JOIN EGS.top_25_countries_fresh_water_use d
+ON a.Year = d.Year
+and a.Entity = d.Entity;
+
+
+----------------------------------------------------------------------------
+
+SELECT * FROM EGS.top_25_countries_predictions;
+
+
+
