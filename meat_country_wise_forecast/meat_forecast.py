@@ -353,7 +353,7 @@ for country_name in list_countries:
         plt.tight_layout()
         plt.savefig(country_name + ' Autocorrelation.png')
     except:
-        print("error during autocorelation for country:" country_name)
+        print("error during autocorelation for country:" + country_name)
 
 
     """From the __ACF graph__, 

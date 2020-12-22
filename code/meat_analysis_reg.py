@@ -153,29 +153,39 @@ for country_name in list_countries:
 
     rcParams['figure.figsize']  =  10, 5
 
+    plt.clf()
     sns_plot = sns.histplot(data.Total_population, color="b")
     sns_plot.figure.savefig(country_name + "_Total_population.png")
 
+    plt.clf()
     sns_plot = sns.histplot(data.Total_Meat_Consumption, color="r")
     sns_plot.figure.savefig(country_name + "_Total_Meat_Consumption.png")
 
+    plt.clf()
     sns_plot = sns.histplot(data.Total_water_use, color="g")
     sns_plot.figure.savefig(country_name + "_Total_water_use.png")
 
+    plt.clf()
     sns_plot = sns.histplot(data.Total_land_use, color="m")
     sns_plot.figure.savefig(country_name + "_Total_land_use.png")
 
+    plt.clf()
     sns_plot = sns.histplot(data.Total_CO2_emission, color="y")
     sns_plot.figure.savefig(country_name + "_Total_CO2_emission.png")
 
     """### Is there a relationship between Total_CO2_emission and Total_Meat_Consumption, between Total_land_use and Total_Meat_Consumption, and between Total_water_use and Total_Meat_Consumption?"""
 
+    plt.clf()
     sns_plot  = sns.jointplot("Total_Meat_Consumption", "Total_water_use", data=data, kind='reg')
     sns_plot.savefig(country_name + "_Meat_Water.png")
 
+
+    plt.clf()
     sns_plot =  sns.jointplot("Total_Meat_Consumption", "Total_land_use", data=data, kind='reg')
     sns_plot.savefig(country_name + "_Meat_land.png")
 
+
+    plt.clf()
     sns_plot =  sns.jointplot("Total_Meat_Consumption", "Total_CO2_emission", data=data, kind='reg')
     sns_plot.savefig(country_name + "_Meat_CO2.png")
 
@@ -187,21 +197,32 @@ for country_name in list_countries:
     ### Visualising Pairwise correlation
     """
 
+    plt.clf()
     sns_plot = sns.pairplot(data, height = 2, aspect = 1.5)
     sns_plot.savefig(country_name + "_PAIR_PLOT.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, hue = "Total_Meat_Consumption")
     sns_plot.savefig(country_name + "_PAIR_PLOT1.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data,hue="Total_Meat_Consumption", diag_kind="hist")
     sns_plot.savefig(country_name + "_PAIR_PLOT2.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data,kind="kde")
     sns_plot.savefig(country_name + "_PAIR_PLOT3.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, kind = 'hist')
     sns_plot.savefig(country_name + "_PAIR_PLOT4.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(
         data,
         x_vars=["Total_population","Total_Meat_Consumption"],
@@ -209,9 +230,13 @@ for country_name in list_countries:
     )
     sns_plot.savefig(country_name + "_PAIR_PLOT5.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, corner=True)
     sns_plot.savefig(country_name + "_PAIR_PLOT6.png")
 
+
+    plt.clf()    
     sns_plot = sns.pairplot(
         data,
         plot_kws=dict(marker="+", linewidth=1),
@@ -219,6 +244,8 @@ for country_name in list_countries:
     )
     sns_plot.savefig(country_name + "_PAIR_PLOT7.png")
 
+
+    plt.clf()
     g = sns.pairplot(data, diag_kind="kde")
     g.map_lower(sns.kdeplot, levels=4, color=".2")
     g.savefig(country_name + "_PAIR_PLOT8.png")
@@ -226,21 +253,28 @@ for country_name in list_countries:
 
 
 
+    plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_population","Total_Meat_Consumption"],
         y_vars=["Total_population","Total_Meat_Consumption"],
         height=4, aspect=1, kind='reg')
     sns_plot.savefig(country_name + "_PAIR_PLOT_REG1.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_water_use","Total_Meat_Consumption"],
         y_vars=["Total_water_use","Total_Meat_Consumption"],
         height=4, aspect=1, kind='reg')
     sns_plot.savefig(country_name + "_PAIR_PLOT_REG2.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_land_use","Total_Meat_Consumption"],
         y_vars=["Total_land_use","Total_Meat_Consumption"],
         height=4, aspect=1, kind='reg')
     sns_plot.savefig(country_name + "_PAIR_PLOT_REG3.png")
 
+
+    plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_CO2_emission","Total_Meat_Consumption"],
         y_vars=["Total_CO2_emission","Total_Meat_Consumption"],
         height=4, aspect=1, kind='reg')
