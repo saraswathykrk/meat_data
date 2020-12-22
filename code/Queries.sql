@@ -211,6 +211,8 @@ ORDER BY Total_Country_Pop DESC
 ----------------------------------------------------------------------------
 
 
+
+
 SELECT a.Total_Meat_Consumption,b.Total_Meat_Consumption,
 c.Total_Meat_Consumption,d.Total_Meat_Consumption,
 a.dates,a.Entity,a.Total_Meat_Consumption,b.Year, b.Total_CO2_emission,
@@ -225,6 +227,8 @@ and a.Entity = c.Entity
 LEFT JOIN EGS.top_25_countries_fresh_water_use d
 ON Year(a.dates) = d.Year
 and a.Entity = d.Entity;
+
+
 
 
 ----------------------------------------------------------------------------
