@@ -120,6 +120,7 @@ for country_name in list_countries:
     import matplotlib.pylab as plt 
     # %matplotlib inline                        
 
+    plt.clf()
     plt.xlabel('dates')
     plt.ylabel('Meat consumption for ' + country_name)
     plt.plot(indexedDataset)
@@ -130,9 +131,8 @@ for country_name in list_countries:
     ### 3. Decomposition <a name = "Decomposition"></a>
     """
 
-    
+    plt.clf()
     rcParams['figure.figsize']  =  10, 5
-
 
     decomposed_dataset  =  seasonal_decompose(indexedDataset)         
     figure  =  decomposed_dataset.plot()
@@ -223,7 +223,7 @@ for country_name in list_countries:
     plt.plot(indexedDataset_logScale)
     plt.savefig(country_name + ' Log Scale.png')
 
-
+    plt.clf()
     test_stationarity(indexedDataset_logScale, country_name + ' Rolling - Log Scale.png')
 
     """Still not stationary
@@ -245,7 +245,7 @@ for country_name in list_countries:
 
     #### 5.2 Log Scale - Moving Average Transformation  <a name = "Log Scale - Moving Average Transformation"></a>
     """
-
+    plt.clf()
     movingAverage  =  indexedDataset_logScale.rolling(window = 2).mean()
     datasetLogScaleMinusMovingAverage  =  indexedDataset_logScale - movingAverage
     plt.plot(datasetLogScaleMinusMovingAverage)
@@ -254,6 +254,8 @@ for country_name in list_countries:
     #Remove NAN values
     datasetLogScaleMinusMovingAverage.dropna(inplace = True)
 
+
+    plt.clf()
     test_stationarity(datasetLogScaleMinusMovingAverage, country_name + ' Rolling - Log Scale Moving Average.png')
 
     """- p-value has __reduced__ from 0.99 to 3.180121e-09.
@@ -273,16 +275,19 @@ for country_name in list_countries:
     """
 
     exponentialDecayWeightedAverage  =  indexedDataset_logScale.ewm(halflife = 12, min_periods = 0, adjust = True).mean()
+    plt.clf()
     plt.plot(indexedDataset_logScale)
     plt.plot(exponentialDecayWeightedAverage, color = 'red')
     plt.savefig(country_name + ' exponential Decay Weighted Average.png')
 
+    plt.clf()
     test_stationarity(exponentialDecayWeightedAverage, country_name + ' Rolling - exponential Decay Weighted Average.png')
 
     """From above graph, it seems that exponential decay is not holding any advantage over log scale as both the corresponding curves are similar."""
 
     datasetLogScaleMinusExponentialMovingAverage  =  indexedDataset_logScale - exponentialDecayWeightedAverage
 
+    plt.clf()
     test_stationarity(datasetLogScaleMinusExponentialMovingAverage, country_name + ' Rolling - exponential Moving Average.png')
 
     """We observe that the Time Series is stationary & also the series for moving avg & std. dev. is almost parallel to x-axis thus they also have no trend.  
@@ -308,11 +313,13 @@ for country_name in list_countries:
     """
 
     datasetLogDiffShifting  =  indexedDataset_logScale - indexedDataset_logScale.shift()
+    plt.clf()
     plt.plot(datasetLogDiffShifting)
     plt.savefig(country_name + ' Log Diff Shifting.png')
 
     datasetLogDiffShifting.dropna(inplace = True)
 
+    plt.clf()
     test_stationarity(datasetLogDiffShifting, country_name + ' Rolling - Log Diff Shifting.png')
 
     """From above 2 graphs, we can see that, visually this is the best result as our series along with rolling statistic values of moving avg & moving std. dev. is very much flat & stationary. But, the ADCF test shows us that:
@@ -328,6 +335,7 @@ for country_name in list_countries:
 
 
     try:
+        plt.clf()
 
         lag_acf  =  acf(datasetLogDiffShifting, nlags = 20)
         lag_pacf  =  pacf(datasetLogDiffShifting, nlags = 20, method = 'ols')
@@ -458,6 +466,7 @@ for country_name in list_countries:
     # plot results
 
 
+    pyplot.clf()
     pyplot.plot(test)
     pyplot.plot(predictions, color='red')
     pyplot.savefig(country_name + ' ARMA Model MSE.png')
@@ -476,6 +485,7 @@ for country_name in list_countries:
     """- Alternatively you can also use __plot_predict()__ method. """
 
     plot = model_fit.plot_predict()
+    plot.clf()
     plot.savefig(country_name + ' ARMA model_1.png')
 
     """#### 7.3 ARIMA Model <a name = "ARIMA Model"></a>
@@ -529,7 +539,7 @@ for country_name in list_countries:
 
     
 
-
+    pyplot.clf()
     pyplot.plot(indexedDataset, color='green')
     pyplot.plot(reverted_back_prediction, color='red')
     pyplot.savefig(country_name + ' ARIMA Model Predictions.png')
@@ -550,6 +560,7 @@ for country_name in list_countries:
     - Using plot_predict method
     """
 
+    plot.clf()
     plot = results_ARIMA.plot_predict(1,70)
     plot.savefig(country_name + ' ARIMA Model Predictions_1.png')
 
@@ -574,6 +585,7 @@ for country_name in list_countries:
 
     
 
+    pyplot.clf()
     pyplot.plot(indexedDataset, color='blue')
 
     pyplot.plot(reverted_back_prediction, color='red')
@@ -602,6 +614,7 @@ for country_name in list_countries:
 
     model  =  ARIMA(indexedDataset_logScale, order = (2,1,0))
     results_AR  =  model.fit()
+    plt.clf()
     plt.plot(datasetLogDiffShifting, color = 'black')
     plt.plot(results_AR.fittedvalues, color = 'red')
     plt.title('RSS: %.4f'%sum((results_AR.fittedvalues - datasetLogDiffShifting['Total_Meat_Consumption after log diff shifting'])**2))
@@ -611,6 +624,7 @@ for country_name in list_countries:
     #MA Model
     model  =  ARIMA(indexedDataset_logScale, order = (1,2,0))
     results_MA  =  model.fit()
+    plt.clf()
     plt.plot(datasetLogDiffShifting, color = 'blue')
     plt.plot(results_MA.fittedvalues, color = 'red')
     plt.title('RSS: %.4f'%sum((results_MA.fittedvalues - datasetLogDiffShifting['Total_Meat_Consumption after log diff shifting'])**2))
