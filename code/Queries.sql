@@ -36,6 +36,21 @@ SELECT
 FROM
     top_countries;
 
+
+
+----------------------------------------------------------------------------
+
+CREATE TABLE top_25_countries_CO2
+AS 
+SELECT a.*, a.`Per capita CO2 emissions`*b.Total_population AS Total_CO2_emission, b.Total_population
+FROM EGS.`co-emissions-per-capita` a,
+EGS.population_total b
+WHERE a.Year = b.Year
+AND a.Entity = b.Entity
+AND a.entity in (SELECT c.Entity from EGS.`top_25_countries` c);
+
+
+
 ----------------------------------------------------------------------------
 
 CREATE TABLE total_meat_consumption_per_year_top_25 AS SELECT a.*,
@@ -60,11 +75,11 @@ ALTER TABLE EGS.total_meat_consumption_per_year_top_25 ADD COLUMN dates VARCHAR(
 
 UPDATE EGS.total_meat_consumption_per_year_top_25 
 SET 
-    dates = CONCAT(month, '-', Year);
+    month = 'January';
 
 UPDATE EGS.total_meat_consumption_per_year_top_25 
 SET 
-    month = 'January';
+    dates = CONCAT(month, '-', Year);
 
 ----------------------------------------------------------------------------
 
@@ -77,11 +92,9 @@ CREATE TABLE EGS.top_25_meat_consumption AS SELECT Entity, Code, Year, month, da
 
 
 CREATE TABLE top_25_countries_CO2_vs_meat AS SELECT b.*,
-    a.`GDP per capita, PPP (constant 2011 international $)`,
     a.`Per capita CO2 emissions`,
-    a.`Per capita consumption-based CO2 emissions`,
     a.Total_CO2_emission FROM
-    EGS.top_12_countries_CO2 a,
+    EGS.top_25_countries_CO2 a,
     EGS.total_meat_consumption_per_year_top_25 b
 WHERE
     a.Year = b.Year AND a.Entity = b.Entity;
@@ -198,12 +211,12 @@ ORDER BY Total_Country_Pop DESC
 ----------------------------------------------------------------------------
 
 
-SELECT a.Total_Meat_Consumption,b.Total_Consumption,
-c.Total_Consumption,d.Total_Consumption,
+SELECT a.Total_Meat_Consumption,b.Total_Meat_Consumption,
+c.Total_Meat_Consumption,d.Total_Meat_Consumption,
 a.dates,a.Entity,a.Total_Meat_Consumption,b.Year, b.Total_CO2_emission,
 b.Total_population,c.Total_land_use,c.Year,d.Total_water_use
 FROM EGS.`china predicted` a
-LEFT JOIN EGS.top_countries_CO2_vs_meat b
+LEFT JOIN EGS.top_25_countries_CO2_vs_meat b
 ON Year(a.dates) = b.Year
 and a.Entity = b.Entity
 LEFT JOIN EGS.top_25_countries_land_use c
@@ -219,9 +232,9 @@ and a.Entity = d.Entity;
 
 CREATE TABLE top_25_countries_predictions
 as
-SELECT a.Entity,a.Year,a.Total_population,a.Total_Consumption Total_Meat_Consumption,
+SELECT a.Entity,a.Year,a.Total_population,a.Total_Meat_Consumption Total_Meat_Consumption,
 Total_water_use,Total_land_use,Total_CO2_emission
-FROM EGS.top_countries_CO2_vs_meat a
+FROM EGS.top_25_countries_CO2_vs_meat a
 INNER JOIN EGS.top_25_countries_land_use c
 ON A.YEAR = c.Year
 and a.Entity = c.Entity
