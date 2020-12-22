@@ -64,6 +64,7 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from matplotlib.pylab import rcParams
 # allow plots to appear directly in the notebook
 # %matplotlib inline
 #from google.colab import files
@@ -90,11 +91,13 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-#list_countries = ['China']
+#list_countries = ['China','Canada']
 
 
 curr_dir = os.getcwd()
+reg_dict = {}
 
+excel = False
 
 for country_name in list_countries:
 
@@ -147,6 +150,8 @@ for country_name in list_countries:
 
     __Distribution of Features__
     """
+
+    rcParams['figure.figsize']  =  10, 5
 
     sns_plot = sns.histplot(data.Total_population, color="b")
     sns_plot.figure.savefig(country_name + "_Total_population.png")
@@ -249,11 +254,25 @@ for country_name in list_countries:
 
     ### Calculating and plotting heatmap correlation
     """
+    
 
     data.corr()
+    plt.clf()
 
-    sns_plot = sns.heatmap( data.corr(), annot=True );
-    sns_plot.figure.savefig(country_name + "_HEAT_MAP.png")
+    rcParams['figure.figsize']  =  10, 10
+
+    fig = plt.figure(figsize=(10, 8))
+    plt.tight_layout()
+    #fig, ax = plt.subplots(figsize=(10,8))  
+    fig.subplots_adjust(left=0.3)
+    ax1 = fig.add_axes([0.2,0.2,0.7,0.7])
+   
+    heat_map = sns.heatmap( data.corr(), square = True, annot=True, ax=ax1,linewidths=.5);
+    heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45);
+    heat_map.set_yticklabels(heat_map.get_yticklabels(), rotation=45);
+    plt.savefig(country_name + "_HEAT_MAP.png")
+
+    
 
     """__Observation__
 
@@ -326,9 +345,11 @@ for country_name in list_countries:
 
     scaler = StandardScaler().fit(data)
     data1 = scaler.transform(data)
+    #data1 = data.copy()
 
     data = pd.DataFrame(data1)
     data.tail()
+
 
     data.columns = ['Total_Meat_Consumption','Total_CO2_emission']
     data.head()
@@ -408,6 +429,7 @@ for country_name in list_countries:
 
         return linreg
 
+
     X = data['Total_Meat_Consumption']
     y = data.Total_CO2_emission
     X = X.values.reshape(-1, 1)
@@ -421,6 +443,10 @@ for country_name in list_countries:
 
     print('Intercept:',linreg.intercept_)                                           # print the intercept 
     print('Coefficients:',linreg.coef_)
+    
+    CO2_intercept = linreg.intercept_[0]
+    CO2_coeff = linreg.coef_[0][0]
+    
 
     """Its hard to remember the order of the feature names, we so we are __zipping__ the features to pair the feature names with the coefficients"""
 
@@ -451,18 +477,42 @@ for country_name in list_countries:
     y_pred_test = linreg.predict(X_test)                                                         # make predictions on the testing set
     y_pred_test
 
-    """**Creating the dataframe for output csv**
+    """**Visualizing the fit on the dataset**"""
+
+    inv_df_train = pd.DataFrame(X_train.values,columns = ['Total_Meat_Consumption'])
+    inv_df_train.insert(1,'y_pred',y_pred_train)
+    
+    inversed_train = scaler.inverse_transform(inv_df_train)
+    
+
+    inv_df_test = pd.DataFrame(X_test.values,columns = ['Total_Meat_Consumption'])
+    inv_df_test.insert(1,'y_pred',y_pred_test)
+    
+    inversed_test = scaler.inverse_transform(inv_df_test)
 
 
+    plt.clf()
+    plt.scatter(X_train,y_train,color='yellow')
+    plt.plot(X_train, CO2_intercept + CO2_coeff * X_train, 'b')
+    plt.plot(X_test, CO2_intercept + CO2_coeff * X_test, 'r')
+    plt.savefig(country_name + '_Total_CO2_reg.png')
 
-    """
+    """**Inserting into the dataframe for output csv**"""
+
+    """**Creating the dataframe for output csv**"""
 
     #x = np.arange(1,10,1).reshape(-1,1)
+    df_train=pd.DataFrame(data_year['Year'][:-14])
     df=pd.DataFrame(data_year['Year'][-14:])
 
-    df.insert(0, 'Entity', 'China')
-    df.insert(1,'Total_Meat_Consumption',X_test.values,True)
-    df.insert(1,'Total_CO2_emission',y_pred_test,True)
+    df_train.insert(0, 'Entity', country_name)
+    df_train.insert(1,'Total_Meat_Consumption',inversed_train[:,[0]],True)
+    df_train.insert(2,'Total_CO2_emission',inversed_train[:,[1]],True)
+    df_train
+
+    df.insert(0, 'Entity', country_name)
+    df.insert(1,'Total_Meat_Consumption',inversed_test[:,[0]],True)
+    df.insert(2,'Total_CO2_emission',inversed_test[:,[1]],True)
     df
 
     """**- We need an evaluation metric in order to compare our predictions with the actual values.**"""
@@ -629,6 +679,9 @@ for country_name in list_countries:
     print('Intercept:',linreg.intercept_)                                           # print the intercept 
     print('Coefficients:',linreg.coef_)
 
+    land_intercept = linreg.intercept_[0]
+    land_coeff = linreg.coef_[0][0]
+
     """__y = 0.69900332 + 1.75430078 `*` Total_land_use__
 
     How do we interpret the Total_Meat_Consumption coefficient (1.7543)
@@ -641,9 +694,32 @@ for country_name in list_countries:
     y_pred_train = linreg.predict(X_train)
     y_pred_test = linreg.predict(X_test)
 
+    """**Visualizing the fit on the dataset**"""
+
+    inv_df_train = pd.DataFrame(X_train.values,columns = ['Total_Meat_Consumption'])
+    inv_df_train.insert(1,'y_pred',y_pred_train)
+    
+    inversed_train = scaler.inverse_transform(inv_df_train)
+    
+
+    inv_df_test = pd.DataFrame(X_test.values,columns = ['Total_Meat_Consumption'])
+    inv_df_test.insert(1,'y_pred',y_pred_test)
+    
+    inversed_test = scaler.inverse_transform(inv_df_test)
+
+
+    plt.clf()
+    plt.scatter(X_train,y_train,color='yellow')
+    plt.plot(X_train, land_intercept + land_coeff * X_train, 'b')
+    plt.plot(X_test, land_intercept + land_coeff * X_test, 'r')
+    plt.savefig(country_name + '_Total_land_use_reg.png')
+
     """**Inserting into the dataframe for output csv**"""
 
-    df.insert(3, 'Total_land_use', y_pred_test,True)
+    df_train.insert(3, 'Total_land_use', inversed_train[:,[1]],True)
+    df.head()
+
+    df.insert(3, 'Total_land_use', inversed_test[:,[1]],True)
     df.head()
 
     #So lets again split our train and test using only X_train and y_train, as we need to evaluate the model
@@ -712,7 +788,7 @@ for country_name in list_countries:
     """
 
     data = data_bkup.copy()
-    data = data.drop(["Entity","Total_population",	"Total_CO2_emission","Total_water_use"], axis = 1)
+    data = data.drop(["Entity","Total_population",	"Total_CO2_emission","Total_land_use"], axis = 1)
     data.head()
 
     scaler = StandardScaler().fit(data)
@@ -762,6 +838,9 @@ for country_name in list_countries:
     print('Intercept:',linreg.intercept_)                                           # print the intercept 
     print('Coefficients:',linreg.coef_)
 
+    water_intercept = linreg.intercept_[0]
+    water_coeff = linreg.coef_[0][0]
+
     """__y = 0.69900332 + 1.75430078 `*` Total_water_use__
 
     How do we interpret the Total_Meat_Consumption coefficient (1.7543)
@@ -774,10 +853,32 @@ for country_name in list_countries:
     y_pred_train = linreg.predict(X_train)
     y_pred_test = linreg.predict(X_test)
 
+    """**Visualizing the fit on the dataset**"""
+
+    inv_df_train = pd.DataFrame(X_train.values,columns = ['Total_Meat_Consumption'])
+    inv_df_train.insert(1,'y_pred',y_pred_train)
+    
+    inversed_train = scaler.inverse_transform(inv_df_train)
+    
+
+    inv_df_test = pd.DataFrame(X_test.values,columns = ['Total_Meat_Consumption'])
+    inv_df_test.insert(1,'y_pred',y_pred_test)
+    
+    inversed_test = scaler.inverse_transform(inv_df_test)
+
+
+    plt.clf()
+    plt.scatter(X_train,y_train,color='yellow')
+    plt.plot(X_train, water_intercept + water_coeff  * X_train, 'b')
+    plt.plot(X_test, water_intercept + water_coeff  * X_test, 'r')
+    plt.savefig(country_name + '_Total_water_use_reg.png')
+
     """**Inserting into the dataframe for output csv**"""
 
-    df.insert(4, 'Total_water_use', y_pred_test,True)
-    df.to_csv(country_name + ' reg.csv')
+    df_train.insert(4, 'Total_water_use', inversed_train[:,[1]],True)
+    df
+
+    df.insert(4, 'Total_water_use', inversed_test[:,[1]],True)
     df
 
     #So lets again split our train and test using only X_train and y_train, as we need to evaluate the model
@@ -846,6 +947,21 @@ for country_name in list_countries:
     """
 
     #files.download(country_name + '.csv')
+    
+    list_coeffs = [{'CO2_intercept':CO2_intercept},{'CO2_coeff':CO2_coeff},
+                            {'land_intercept':land_intercept},{'land_coeff':land_coeff},
+                            {'water_intercept':water_intercept},{'water_coeff':water_coeff}]
 
+    reg_dict[country_name] = list_coeffs
+    #print("dict:",reg_dict)
 
     os.chdir(curr_dir)
+    if excel == False:
+        df_train.to_csv('regression.csv')
+        df.to_csv('regression.csv',mode='a', header=False)
+        excel = True
+    else:
+        df_train.to_csv('regression.csv',mode='a', header=False)
+        df.to_csv('regression.csv',mode='a', header=False)
+    #writer.save()
+print("dict:",reg_dict)
