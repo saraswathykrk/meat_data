@@ -92,7 +92,7 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-#list_countries = ['China','Canada']
+list_countries = ['China','Canada']
 
 
 curr_dir = os.getcwd()
@@ -152,7 +152,7 @@ for country_name in list_countries:
     __Distribution of Features__
     """
 
-    rcParams['figure.figsize']  =  10, 5
+    #rcParams['figure.figsize']  =  10, 5
 
     plt.clf()
     sns_plot = sns.histplot(data.Total_population, color="b")
