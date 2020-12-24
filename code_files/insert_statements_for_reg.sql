@@ -89,6 +89,9 @@ WHERE Year(dates) > 2017;
 
 
 
+
+
+
 INSERT INTO `EGS`.`top_25_countries_land_use`
 (`Year`,
 `Entity`,
@@ -170,7 +173,6 @@ FROM EGS.`united states predicted`
 WHERE Year(dates) > 2017;
 
 
-
 INSERT INTO `EGS`.`top_25_countries_land_use`
 (`Year`,
 `Entity`,
@@ -178,6 +180,8 @@ INSERT INTO `EGS`.`top_25_countries_land_use`
 SELECT Year(dates),Entity,Total_Meat_Consumption
 FROM EGS.`mexico predicted`
 WHERE Year(dates) > 2017;
+
+
 
 
 
