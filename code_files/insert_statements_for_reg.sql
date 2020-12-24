@@ -78,6 +78,16 @@ SELECT Year(dates),Entity,Total_Meat_Consumption
 FROM EGS.`united states predicted`
 WHERE Year(dates) > 2017;
 
+INSERT INTO `EGS`.`top_25_countries_CO2_vs_meat`
+(`Year`,
+`Entity`,
+`Total_Meat_Consumption`)
+SELECT Year(dates),Entity,Total_Meat_Consumption
+FROM EGS.`mexico predicted`
+WHERE Year(dates) > 2017;
+
+
+
 
 INSERT INTO `EGS`.`top_25_countries_land_use`
 (`Year`,
@@ -161,6 +171,16 @@ WHERE Year(dates) > 2017;
 
 
 
+INSERT INTO `EGS`.`top_25_countries_land_use`
+(`Year`,
+`Entity`,
+`Total_Meat_Consumption`)
+SELECT Year(dates),Entity,Total_Meat_Consumption
+FROM EGS.`mexico predicted`
+WHERE Year(dates) > 2017;
+
+
+
 
 INSERT INTO `EGS`.`top_25_countries_fresh_water_use`
 (`Year`,
@@ -242,6 +262,13 @@ SELECT Year(dates),Entity,Total_Meat_Consumption
 FROM EGS.`united states predicted`
 WHERE Year(dates) > 2017;
 
+INSERT INTO `EGS`.`top_25_countries_fresh_water_use`
+(`Year`,
+`Entity`,
+`Total_Meat_Consumption`)
+SELECT Year(dates),Entity,Total_Meat_Consumption
+FROM EGS.`mexico predicted`
+WHERE Year(dates) > 2017;
 
 
 

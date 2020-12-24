@@ -91,7 +91,7 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-#list_countries = ['Canada']
+#list_countries = ['Mexico']
 
 
 curr_dir = os.getcwd()
