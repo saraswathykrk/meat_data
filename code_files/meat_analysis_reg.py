@@ -91,7 +91,7 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-#list_countries = ['China','Canada']
+#list_countries = ['Canada']
 
 
 curr_dir = os.getcwd()
@@ -151,6 +151,8 @@ for country_name in list_countries:
     __Distribution of Features__
     """
 
+    print("plotting graphs..: ",country_name)
+
     rcParams['figure.figsize']  =  10, 5
 
     plt.clf()
@@ -196,6 +198,8 @@ for country_name in list_countries:
 
     ### Visualising Pairwise correlation
     """
+
+    print("PAIR_PLOT: ",country_name)
 
     plt.clf()
     sns_plot = sns.pairplot(data, height = 2, aspect = 1.5)
@@ -251,7 +255,7 @@ for country_name in list_countries:
     g.savefig(country_name + "_PAIR_PLOT8.png")
 
 
-
+    print("PAIR_PLOT_REG: ",country_name)
 
     plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_population","Total_Meat_Consumption"],
@@ -289,9 +293,11 @@ for country_name in list_countries:
     ### Calculating and plotting heatmap correlation
     """
     
+    print("heatmap: ",country_name)
 
     data.corr()
     plt.clf()
+
 
     rcParams['figure.figsize']  =  10, 10
 
@@ -305,6 +311,8 @@ for country_name in list_countries:
     heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45);
     heat_map.set_yticklabels(heat_map.get_yticklabels(), rotation=45);
     plt.savefig(country_name + "_HEAT_MAP.png")
+
+    print("finished plotting graphs..: ",country_name)
 
     
 

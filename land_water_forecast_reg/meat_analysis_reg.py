@@ -70,7 +70,6 @@ from matplotlib.pylab import rcParams
 #from google.colab import files
 import os
 import shutil
-from sklearn.linear_model import LinearRegression
 
 # Supress Warnings
 
@@ -92,7 +91,7 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-list_countries = ['China','Canada']
+#list_countries = ['Canada']
 
 
 curr_dir = os.getcwd()
@@ -152,7 +151,9 @@ for country_name in list_countries:
     __Distribution of Features__
     """
 
-    #rcParams['figure.figsize']  =  10, 5
+    print("plotting graphs..: ",country_name)
+
+    rcParams['figure.figsize']  =  10, 5
 
     plt.clf()
     sns_plot = sns.histplot(data.Total_population, color="b")
@@ -197,6 +198,8 @@ for country_name in list_countries:
 
     ### Visualising Pairwise correlation
     """
+
+    print("PAIR_PLOT: ",country_name)
 
     plt.clf()
     sns_plot = sns.pairplot(data, height = 2, aspect = 1.5)
@@ -252,7 +255,7 @@ for country_name in list_countries:
     g.savefig(country_name + "_PAIR_PLOT8.png")
 
 
-
+    print("PAIR_PLOT_REG: ",country_name)
 
     plt.clf()
     sns_plot = sns.pairplot(data, x_vars=["Total_population","Total_Meat_Consumption"],
@@ -290,9 +293,11 @@ for country_name in list_countries:
     ### Calculating and plotting heatmap correlation
     """
     
+    print("heatmap: ",country_name)
 
     data.corr()
     plt.clf()
+
 
     rcParams['figure.figsize']  =  10, 10
 
@@ -306,6 +311,8 @@ for country_name in list_countries:
     heat_map.set_xticklabels(heat_map.get_xticklabels(), rotation=45);
     heat_map.set_yticklabels(heat_map.get_yticklabels(), rotation=45);
     plt.savefig(country_name + "_HEAT_MAP.png")
+
+    print("finished plotting graphs..: ",country_name)
 
     
 
@@ -444,6 +451,7 @@ for country_name in list_countries:
         
         X_train, X_test, y_train, y_test = X[:-14],X[-14:],y[:-14],y[-14:]
 
+        from sklearn.linear_model import LinearRegression
         linreg = LinearRegression()
         
         if not(gridsearch):
@@ -751,7 +759,7 @@ for country_name in list_countries:
     """**Inserting into the dataframe for output csv**"""
 
     df_train.insert(3, 'Total_land_use', inversed_train[:,[1]],True)
-    df_train.head()
+    df.head()
 
     df.insert(3, 'Total_land_use', inversed_test[:,[1]],True)
     df.head()
@@ -910,7 +918,7 @@ for country_name in list_countries:
     """**Inserting into the dataframe for output csv**"""
 
     df_train.insert(4, 'Total_water_use', inversed_train[:,[1]],True)
-    df_train
+    df
 
     df.insert(4, 'Total_water_use', inversed_test[:,[1]],True)
     df

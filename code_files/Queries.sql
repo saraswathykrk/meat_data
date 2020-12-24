@@ -112,7 +112,8 @@ FROM
 
 
 CREATE TABLE top_25_countries_land_use AS
-SELECT (a.Bovine_meat * b.Bovine_meat + a.Meat_Other * b.Meat_Other + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat) Total_land_use,
+SELECT (a.Bovine_meat * b.Bovine_meat + a.Meat_Other * b.Meat_Other + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat) per_capita_land_use,
+    (a.Bovine_meat * b.Bovine_meat + a.Meat_Other * b.Meat_Other + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat)*b.Total_population Total_land_use,
     b.* FROM
     EGS.`land-use-protein-poore_mod` a,
     EGS.total_meat_consumption_per_year_top_25 b
@@ -131,7 +132,8 @@ FROM
 
 
 CREATE TABLE top_25_countries_fresh_water_use AS 
-SELECT (a.Bovine_meat * b.Bovine_meat + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat) Total_water_use,
+SELECT (a.Bovine_meat * b.Bovine_meat + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat) per_capita_water_use,
+    (a.Bovine_meat * b.Bovine_meat + a.Meat_Other * b.Meat_Other + b.Mutton_Goat * a.Mutton_Goat + a.Pigmeat * b.Pigmeat + a.Poultry_meat * b.Poultry_meat)*b.Total_population Total_water_use,
     b.* FROM
     EGS.`water-per-tonne-food_mod` a,
     EGS.total_meat_consumption_per_year_top_25 b
