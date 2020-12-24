@@ -91,7 +91,7 @@ dataset2.where(dataset2['Year']>2017, inplace = True)
 
 list_countries = dataset2['Entity'].dropna().unique().tolist()
 print('list of countries:',list_countries)
-#list_countries = ['Mexico']
+#list_countries = ['China']
 
 
 curr_dir = os.getcwd()
@@ -207,12 +207,12 @@ for country_name in list_countries:
 
 
     plt.clf()
-    sns_plot = sns.pairplot(data, hue = "Total_Meat_Consumption")
+    sns_plot = sns.pairplot(data, hue = "Total_population")
     sns_plot.savefig(country_name + "_PAIR_PLOT1.png")
 
 
     plt.clf()
-    sns_plot = sns.pairplot(data,hue="Total_Meat_Consumption", diag_kind="hist")
+    sns_plot = sns.pairplot(data,hue="Total_population", diag_kind="hist")
     sns_plot.savefig(country_name + "_PAIR_PLOT2.png")
 
 
