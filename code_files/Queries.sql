@@ -255,3 +255,21 @@ SELECT * FROM EGS.top_25_countries_predictions;
 
 
 
+----------------------------------------------------------------------------
+
+
+
+CREATE TABLE meat_type
+as 
+SELECT Entity,bovine_meat*Total_population Beef,poultry_meat*Total_population Chicken,
+pigmeat*Total_population Pig, mutton_goat*Total_population Mutton, meat_other*Total_population Other,
+Total_Meat_Consumption
+ FROM EGS.total_meat_consumption_per_year_top_25
+where year = 2017;
+
+select * from meat_type;
+
+
+
+
+
